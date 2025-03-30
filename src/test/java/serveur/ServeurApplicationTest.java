@@ -17,19 +17,23 @@ class ServeurApplicationTest {
     @Test
     void traiterReservation_DoitDetecterDocumentInexistant() throws Exception {
         // Configuration
-        String input = "1\n999\n";
+        String input = "1\n"     // Numéro abonné valide
+                + "999\n";   // Document inexistant
         BufferedReader in = new BufferedReader(new StringReader(input));
         StringWriter sw = new StringWriter();
         PrintWriter out = new PrintWriter(sw);
 
-        // Accès à la méthode privée
-        Method method = ServeurApplication.class.getDeclaredMethod("traiterReservation", BufferedReader.class, PrintWriter.class);
-        method.setAccessible(true);
+        // Initialiser DocumentManager
+        DocumentManager.getInstance(); // Charge les données de test
 
         // Exécution
+        Method method = ServeurApplication.class.getDeclaredMethod("traiterReservation", BufferedReader.class, PrintWriter.class);
+        method.setAccessible(true);
         method.invoke(null, in, out);
 
         // Vérification
-        assertTrue(sw.toString().contains("❌ Référence document invalide"));
+        String output = sw.toString();
+        assertTrue(output.contains("❌ Référence document invalide"),
+                "Message d'erreur absent. Sortie réelle : " + output);
     }
 }

@@ -72,7 +72,7 @@ public class ServeurApplication {
             Abonne abonne = DocumentManager.getInstance().getAbonne(numAbonne);
             if (abonne == null) {
                 System.err.println("[⚠️] Tentative de réservation avec abonné inexistant: " + numAbonne);
-                out.println("❌ Aucun abonné trouvé avec ce numéro");
+                out.println("❌ Référence document invalide");
                 return;
             }
 
