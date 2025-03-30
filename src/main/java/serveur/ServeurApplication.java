@@ -25,13 +25,13 @@ public class ServeurApplication {
     private static void demarrerServeur(int port, String nomService) {
         new Thread(() -> {
             try (ServerSocket server = new ServerSocket(port)) {
-                System.out.println("🟢 Service " + nomService + " actif sur port " + port);
+                System.out.println("˶ᵔ ᵕ ᵔ˶ Service " + nomService + " actif sur port " + port);
                 while (true) {
                     Socket client = server.accept();
                     new Thread(() -> traiterClient(client, port)).start();
                 }
             } catch (IOException e) {
-                System.err.println("🔴 Erreur " + nomService + " : " + e.getMessage());
+                System.err.println("╥﹏╥ Erreur " + nomService + " : " + e.getMessage());
             }
         }).start();
     }
@@ -47,7 +47,7 @@ public class ServeurApplication {
             }
 
         } catch (SocketException e) {  // <-- Ajout spécifique
-            System.err.println("[📡] Client déconnecté : " + e.getMessage());
+            System.err.println("[❋] Client déconnecté : " + e.getMessage());
         } catch (IOException | InterruptedException e) {
             System.err.println("Erreur client: " + e.getMessage());
         }
@@ -61,7 +61,7 @@ public class ServeurApplication {
             out.println("Entrez votre numéro d'abonné :");
             String input = in.readLine().trim();
             if ("QUIT".equalsIgnoreCase(input)) {
-                System.out.println("[📡] Déconnexion client initiée");
+                System.out.println("[❋] Déconnexion client initiée");
                 return; // Arrêt immédiat du traitement
             }
             int numAbonne = lireEntier(in, out);
@@ -71,8 +71,8 @@ public class ServeurApplication {
             // Vérification abonné
             Abonne abonne = DocumentManager.getInstance().getAbonne(numAbonne);
             if (abonne == null) {
-                System.err.println("[⚠️] Tentative de réservation avec abonné inexistant: " + numAbonne);
-                out.println("❌ Référence document invalide");
+                System.err.println("[( ¬_¬)] Tentative de réservation avec abonné inexistant: " + numAbonne);
+                out.println("╥﹏╥ Référence document invalide");
                 return;
             }
 
@@ -84,14 +84,14 @@ public class ServeurApplication {
             // Récupération document
             Document doc = DocumentManager.getInstance().getDocument(numDoc);
             if (doc == null) {
-                System.err.println("[⚠️] Tentative d'accès document inexistant: " + numDoc);
-                out.println("❌ Référence document invalide");
+                System.err.println("[( ¬_¬)] Tentative d'accès document inexistant: " + numDoc);
+                out.println("╥﹏╥ Référence document invalide");
                 return;
             }
 
             // Bloc synchronisé
             synchronized(doc) {
-                System.out.println("[🔁] Traitement réservation pour document " + numDoc);
+                System.out.println("[✩] Traitement réservation pour document " + numDoc);
 
                 if (doc.reserveur() == null) {
                     try {
@@ -102,26 +102,26 @@ public class ServeurApplication {
                         // Log succès
                         String heureFin = LocalDateTime.now().plusHours(1)
                                 .format(DateTimeFormatter.ofPattern("HH:mm"));
-                        System.out.println("[✅] Réservation réussie - Doc " + numDoc
+                        System.out.println("[(⸝⸝> ᴗ•⸝⸝)] Réservation réussie - Doc " + numDoc
                                 + " par abonné " + numAbonne + " jusqu'à " + heureFin);
-                        out.println("✅ Réservé jusqu'à " + heureFin);
+                        out.println("(⸝⸝> ᴗ•⸝⸝) Réservé jusqu'à " + heureFin);
 
                     } catch (ReservationException e) {
-                        System.err.println("[❌] Échec réservation: " + e.getMessage());
-                        out.println("❌ Erreur: " + e.getMessage());
+                        System.err.println("[╥﹏╥] Échec réservation: " + e.getMessage());
+                        out.println("╥﹏╥ Erreur: " + e.getMessage());
                     }
                 } else {
                     // Gestion conflit
                     LocalDateTime finReservation = DocumentManager.getInstance().getDateFinReservation(numDoc);
                     long tempsRestant = ChronoUnit.SECONDS.between(LocalDateTime.now(), finReservation);
 
-                    System.out.println("[⚔️] Conflit résolution pour doc " + numDoc
+                    System.out.println("[###] Conflit résolution pour doc " + numDoc
                             + " - Temps restant: " + tempsRestant + "s");
 
                     if (tempsRestant <= 60) {
-                        System.out.println("[🎵] Démarrage musique pour abonné " + numAbonne);
+                        System.out.println("[~~~~] Démarrage musique pour abonné " + numAbonne);
                         MusicManager.jouerMusique("attente.wav");
-                        out.println("🎵 Attente musicale démarrée...");
+                        out.println("~~~~ Attente musicale démarrée...");
 
                         try {
                             while (tempsRestant-- > 0 && doc.reserveur() != null) {
@@ -129,30 +129,30 @@ public class ServeurApplication {
                             }
                         } finally {
                             MusicManager.arreterMusique();
-                            System.out.println("[🛑] Musique stoppée pour abonné " + numAbonne);
+                            System.out.println("[^^] Musique stoppée pour abonné " + numAbonne);
                         }
 
                         if (doc.reserveur() == null) {
                             doc.reserver(abonne);
-                            System.out.println("[🎉] Réservation acquise après attente - Doc " + numDoc);
-                            out.println("✅ Réservation réussie après attente !");
+                            System.out.println("[!!!] Réservation acquise après attente - Doc " + numDoc);
+                            out.println("(⸝⸝> ᴗ•⸝⸝) Réservation réussie après attente !");
                         } else {
-                            System.out.println("[💔] Échec attente - Doc " + numDoc + " récupéré");
-                            out.println("⏳ Le document a été pris par un autre utilisateur");
+                            System.out.println("Échec attente - Doc " + numDoc + " récupéré");
+                            out.println("Le document a été pris par un autre utilisateur");
                         }
                     } else {
-                        System.out.println("[⌛] Temps restant trop long: " + tempsRestant + "s");
-                        out.println("⌛ Temps restant trop important: " + tempsRestant + "s");
+                        System.out.println("Temps restant trop long: " + tempsRestant + "s");
+                        out.println("Temps restant trop important: " + tempsRestant + "s");
                     }
                 }
             }
 
         } catch (NumberFormatException e) {
-            System.err.println("[⚠️] Format numérique invalide");
-            out.println("❌ Veuillez entrer uniquement des chiffres !");
+            System.err.println("[(•ˋ _ ˊ•)] Format numérique invalide");
+            out.println("╥﹏╥ Veuillez entrer uniquement des chiffres !");
         } catch (Exception e) {
-            System.err.println("[🔥] Erreur critique: " + e.getMessage());
-            out.println("⚠️ Erreur système - Veuillez réessayer");
+            System.err.println("[╥﹏╥] Erreur critique: " + e.getMessage());
+            out.println("╥﹏╥ Erreur système - Veuillez réessayer");
         }
     }
 
@@ -163,8 +163,8 @@ public class ServeurApplication {
         try {
             return Integer.parseInt(in.readLine().trim());
         } catch (NumberFormatException e) {
-            System.err.println("[⚠️] Entrée non numérique détectée");
-            out.println("❌ Entrée invalide : nombre attendu");
+            System.err.println("[╥﹏╥] Entrée non numérique détectée");
+            out.println("╥﹏╥ Entrée invalide : nombre attendu");
             return -1;
         }
     }
@@ -174,9 +174,9 @@ public class ServeurApplication {
             Abonne abonne = DocumentManager.getInstance().getAbonne(numAbonne);
             doc.reserver(abonne);
             DocumentManager.getInstance().ajouterReservation(doc.numero());
-            out.println("✅ Réservé jusqu'à " + LocalDateTime.now().plusHours(1).toLocalTime());
+            out.println("(ᵔ◡ᵔ) Réservé jusqu'à " + LocalDateTime.now().plusHours(1).toLocalTime());
         } catch (Exception e) {
-            out.println("❌ Erreur : " + e.getMessage());
+            out.println("╥﹏╥ Erreur : " + e.getMessage());
         }
     }
 
@@ -198,8 +198,8 @@ public class ServeurApplication {
             // 2. Vérification abonné
             Abonne abonne = DocumentManager.getInstance().getAbonne(numAbonne);
             if (abonne == null) {
-                System.err.println("[❌] Abonné inconnu: " + numAbonne);
-                out.println("❌ Abonné inconnu");
+                System.err.println("[╥﹏╥] Abonné inconnu: " + numAbonne);
+                out.println("╥﹏╥ Abonné inconnu");
                 return;
             }
 
@@ -220,19 +220,19 @@ public class ServeurApplication {
 
             // 5. Vérifications document
             if (doc == null) {
-                System.err.println("[❌] Document introuvable: " + numDoc);
-                out.println("❌ Document introuvable");
+                System.err.println("[╥﹏╥] Document introuvable: " + numDoc);
+                out.println("╥﹏╥ Document introuvable");
                 return;
             }
             if (doc.emprunteur() != null) {
-                System.err.println("[⏳] Document déjà emprunté: " + numDoc);
-                out.println("⏳ Document déjà emprunté");
+                System.err.println("Document déjà emprunté: " + numDoc);
+                out.println("Document déjà emprunté");
                 return;
             }
             if (doc.reserveur() != null && !doc.reserveur().equals(abonne)) {
                 int reserveurId = doc.reserveur().getNumero();
-                System.err.println("[🔒] Conflit réservation doc " + numDoc + " par abonné #" + reserveurId);
-                out.println("🔒 Réservé par abonné #" + reserveurId);
+                System.err.println("Conflit réservation doc " + numDoc + " par abonné #" + reserveurId);
+                out.println("Réservé par abonné #" + reserveurId);
                 return;
             }
 
@@ -245,8 +245,8 @@ public class ServeurApplication {
 
             // 7. Validation emprunt
             doc.emprunter(abonne);
-            System.out.println("[✅] Emprunt réussi - Doc " + numDoc + " par abonné " + numAbonne);
-            out.println("✅ Emprunt réussi !");
+            System.out.println("[(ᵔ◡ᵔ)] Emprunt réussi - Doc " + numDoc + " par abonné " + numAbonne);
+            out.println("(ᵔ◡ᵔ) Emprunt réussi !");
 
             if (doc.reserveur() != null) {
                 DocumentManager.getInstance().supprimerReservation(numDoc);
@@ -254,14 +254,14 @@ public class ServeurApplication {
             }
 
         } catch (NumberFormatException e) {
-            System.err.println("[⚠️] Format numérique invalide: " + e.getMessage());
-            out.println("❌ Format numérique invalide");
+            System.err.println("[╥﹏╥] Format numérique invalide: " + e.getMessage());
+            out.println("╥﹏╥ Format numérique invalide");
         } catch (EmpruntException e) {
-            System.err.println("[❌] Échec emprunt: " + e.getMessage());
-            out.println("⚠️ Erreur : " + e.getMessage());
+            System.err.println("[╥﹏╥] Échec emprunt: " + e.getMessage());
+            out.println("╥﹏╥ Erreur : " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("[🔥] Erreur inattendue: " + e.getClass().getSimpleName() + " - " + e.getMessage());
-            out.println("⚠️ Erreur système - Veuillez réessayer");
+            System.err.println("Erreur inattendue: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+            out.println("╥﹏╥ Erreur système - Veuillez réessayer");
             e.printStackTrace();
         }
     }
@@ -280,14 +280,14 @@ public class ServeurApplication {
                 return; // Arrêt immédiat du traitement
             }
             int numDoc = Integer.parseInt(in.readLine().trim());
-            System.out.println("[📦] Document #" + numDoc + " sélectionné pour retour");
+            System.out.println("Document #" + numDoc + " sélectionné pour retour");
 
             Document doc = DocumentManager.getInstance().getDocument(numDoc);
 
             // 2. Vérification existence
             if (doc == null) {
-                System.err.println("[❌] Document introuvable: " + numDoc);
-                out.println("❌ Document inconnu");
+                System.err.println("[(ᗒᗣᗕ)՞] Document introuvable: " + numDoc);
+                out.println("(ᗒᗣᗕ)՞ Document inconnu");
                 return;
             }
 
@@ -297,7 +297,7 @@ public class ServeurApplication {
             // 2b. Validation emprunteur existant
             if (ancienEmprunteur == null) {
                 System.err.println("[🚨] Opération invalide : Document non emprunté");
-                out.println("❌ Ce document n'est pas actuellement emprunté");
+                out.println("(ᗒᗣᗕ)՞ Ce document n'est pas actuellement emprunté");
                 return;
             }
 
@@ -312,7 +312,7 @@ public class ServeurApplication {
 
             // 4. Traitement retour
             doc.retourner(estEndommage);
-            out.println("✅ Retour enregistré !");
+            out.println("˙ᴗ˙ Retour enregistré !");
 
             // 5. Notifications complémentaires
             if (estEndommage) {
@@ -332,14 +332,14 @@ public class ServeurApplication {
             out.flush();
 
         } catch (NumberFormatException e) {
-            System.err.println("[❌] Format document invalide: " + e.getMessage());
-            out.println("❌ Veuillez entrer un nombre valide");
+            System.err.println("[╥﹏╥] Format document invalide: " + e.getMessage());
+            out.println("╥﹏╥ Veuillez entrer un nombre valide");
         } catch (Exception e) {
-            System.err.println("[🔥] Erreur critique: " + e.getClass().getSimpleName());
+            System.err.println("[(˶º⤙º˶)] Erreur critique: " + e.getClass().getSimpleName());
             e.printStackTrace();
-            out.println("⚠️ Erreur système - Opération annulée");
+            out.println("(˶º⤙º˶) Erreur système - Opération annulée");
         } finally {
-            System.out.println("[🏁] Fin traitement retour\n");
+            System.out.println("[✧*｡٩(ˊᗜˋ*)و✧*｡] Fin traitement retour\n");
         }
     }
 }

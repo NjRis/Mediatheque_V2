@@ -6,7 +6,7 @@ import java.net.*;
 public class Client {
 
     public static void main(String[] args) {
-        System.out.println("🏷️  Client Médiathèque");
+        System.out.println("(ง •̀_•́)ง  Client Médiathèque");
 
         try (Socket socket = new Socket("localhost", 2000);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -26,7 +26,9 @@ public class Client {
                     // Commande QUIT
                     if ("QUIT".equalsIgnoreCase(input)) {
                         out.println("QUIT");
-                        System.out.println("🚪 Déconnexion...");
+                        System.out.println("∧,,,∧\n" +
+                                "(  ̳• · • ̳)\n" +
+                                "/    づ♡ Déconnexion...");
                         break;
                     }
 

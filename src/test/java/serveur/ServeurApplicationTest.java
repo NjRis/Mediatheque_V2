@@ -33,7 +33,7 @@ class ServeurApplicationTest {
 
         // Vérification
         String output = sw.toString();
-        assertTrue(output.contains("❌ Référence document invalide"),
+        assertTrue(output.contains("( ¬_¬) Référence document invalide"),
                 "Message d'erreur absent. Sortie réelle : " + output);
     }
 }
