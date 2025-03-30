@@ -23,7 +23,6 @@ Application client-serveur Java pour gérer les emprunts, réservations et retou
 
 - **Java 17** ([Téléchargement](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html))
 - **Maven** ([Installation](https://maven.apache.org/install.html))
-- **Base de Données MySQL** (Optionnel - Voir [Configuration](#base-de-données))
 
 ---
 
