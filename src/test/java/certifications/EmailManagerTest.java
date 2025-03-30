@@ -10,7 +10,7 @@ class EmailManagerTest {
 
     @Test
     void envoyerAlerte_DoitAppelerTransport() throws Exception {
-        // Mock des dépendances
+
         Transport transportMock = mock(Transport.class);
         EmailManager emailManager = new EmailManager() {
             protected Transport getTransport(Session session) {
@@ -18,10 +18,10 @@ class EmailManagerTest {
             }
         };
 
-        // Exécution
+
         emailManager.envoyerAlerte("Test");
 
-        // Vérification
+        // marche pas lol
         verify(transportMock).sendMessage(any(), any());
     }
 }

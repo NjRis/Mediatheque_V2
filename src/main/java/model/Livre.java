@@ -37,7 +37,7 @@ public class Livre implements Document {
         reserveur = null;
     }
 
-    // Getters
+
     public int numero() { return numero; }
     public Abonne emprunteur() { return emprunteur; }
     public Abonne reserveur() { return reserveur; }

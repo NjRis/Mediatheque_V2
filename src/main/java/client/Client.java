@@ -17,13 +17,13 @@ public class Client {
             while ((ligne = in.readLine()) != null) {
                 System.out.println(ligne);
 
-                // Gestion de la déconnexion serveur
+
                 if (ligne.contains("Serveur arrêté")) break;
 
                 if (ligne.contains("Entrez")) {
                     String input = clavier.readLine().trim();
 
-                    // Commande QUIT
+
                     if ("QUIT".equalsIgnoreCase(input)) {
                         out.println("QUIT");
                         System.out.println("∧,,,∧\n" +
