@@ -22,4 +22,8 @@ public class MusicManager {
     public static void arreterMusique() {
         if (clip != null) clip.stop();
     }
+
+    public static void setClip(Clip clipMock) {
+        clip = clipMock;
+    }
 }

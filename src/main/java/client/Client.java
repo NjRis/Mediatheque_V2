@@ -13,12 +13,23 @@ public class Client {
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader clavier = new BufferedReader(new InputStreamReader(System.in))) {
 
-            // Lire TOUS les messages du serveur avant d'envoyer les inputs
             String ligne;
             while ((ligne = in.readLine()) != null) {
                 System.out.println(ligne);
+
+                // Gestion de la déconnexion serveur
+                if (ligne.contains("Serveur arrêté")) break;
+
                 if (ligne.contains("Entrez")) {
                     String input = clavier.readLine().trim();
+
+                    // Commande QUIT
+                    if ("QUIT".equalsIgnoreCase(input)) {
+                        out.println("QUIT");
+                        System.out.println("🚪 Déconnexion...");
+                        break;
+                    }
+
                     out.println(input);
                 }
             }

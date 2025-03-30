@@ -5,6 +5,7 @@ import model.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import certifications.EmailManager;
 
 public class DocumentManager {
     private static DocumentManager instance;
@@ -15,8 +16,14 @@ public class DocumentManager {
     private DocumentManager() {
         documents.put(1, new Livre(1, "1984", 328));
         documents.put(2, new DVD(2, "Matrix", true));
-        abonnes.put(1, new Abonne(1, "Alice", LocalDate.of(1990, 5, 15)));
-        abonnes.put(2, new Abonne(2, "Bob", LocalDate.of(2005, 3, 22)));
+        documents.put(3, new DVD(3, "Destination Finale", true));
+        documents.put(4, new DVD(4, "Bob l'éponge", false));
+
+        abonnes.put(1, new Abonne(1, "Iris", LocalDate.of(2004, 8, 2)));
+        abonnes.put(2, new Abonne(2, "Danya", LocalDate.of(2005, 8, 28)));
+        abonnes.put(3, new Abonne(3, "Oum", LocalDate.of(2003, 2, 12)));
+        abonnes.put(4, new Abonne(4, "Sibylle", LocalDate.of(2001, 6, 29)));
+        abonnes.put(5, new Abonne(5, "Pipi", LocalDate.of(2010, 5, 29)));
     }
 
     public LocalDateTime getDateFinReservation(int numDoc) {

@@ -19,6 +19,7 @@ public class Livre implements Document {
         this.pages = pages;
     }
 
+
     public synchronized void reserver(Abonne ab) throws ReservationException {
         if (reserveur != null) throw new ReservationException("Déjà réservé");
         reserveur = ab;
@@ -40,4 +41,8 @@ public class Livre implements Document {
     public int numero() { return numero; }
     public Abonne emprunteur() { return emprunteur; }
     public Abonne reserveur() { return reserveur; }
+
+    public String getTitre() {
+        return titre;
+    }
 }
