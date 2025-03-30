@@ -55,10 +55,10 @@ Sortie attendue :
 Ouvrez Client.java et changez le port dans le code :
 
 
-// Avant
+# Avant
 try (Socket socket = new Socket("localhost", 2000);  // Port par défaut
 
-// Après (ex: pour l'emprunt)
+# Après (ex: pour l'emprunt)
 try (Socket socket = new Socket("localhost", 3000);
 
 ## 3. Lancer le Client
